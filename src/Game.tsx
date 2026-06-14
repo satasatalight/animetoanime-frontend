@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Anime, Staff, VoiceActor } from "./Types";
-import { EntryInline, EntryListView } from "./Components";
+import { EntryInline, EntryListView, LoadingEntryList } from "./Components";
 
 export default function Game({start, end} : {start: Anime, end: Anime}){
     // current entry
@@ -63,6 +63,7 @@ export default function Game({start, end} : {start: Anime, end: Anime}){
         </div>
 
         <div className="px-2 pt-5">
+            <LoadingEntryList entryList={entryList}/>
             <div className="grid grid-row gap-y-4 w-full pb-10">
                 {filteredEntryList.map((next : Anime | Staff | VoiceActor) => {
                     return <EntryListView key={next.id} entry={next} hook={setCurrent}/>

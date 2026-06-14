@@ -38,3 +38,13 @@ export function EntryInline({entry}: {entry: Entry}){
         {entry.name} ➡️
     </>;
 }
+
+export function LoadingEntryList({entryList}: {entryList: Array<Entry>}){
+    if(entryList.length > 0)
+        return <></>;
+
+    return <div className="text-white">
+        Loading
+        <img className="inline invert mx-2" src="src\assets\3-dots-rotate.svg"/>
+    </div>;
+}
