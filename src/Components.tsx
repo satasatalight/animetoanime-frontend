@@ -31,3 +31,10 @@ export function EntryListView({entry, hook} : {entry: Anime | Staff, hook: Funct
         </button>
     );
 }
+
+export function EntryInline({entry}: {entry: Entry}){
+    return <>
+        <img className="inline mx-1 rounded-full aspect-1/1 object-cover max-h-8" src={entry.imageUrl}/>
+        {entry.name} ➡️
+    </>;
+}

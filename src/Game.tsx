@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { Anime, Staff, VoiceActor } from "./Types";
-import { EntryListView } from "./Components";
+import { EntryInline, EntryListView } from "./Components";
 
 export default function Game({start, end} : {start: Anime, end: Anime}){
+    // current entry
     let [current, setCurrent] = useState(start);
+
+    // list of user-made connections to final entry
+    let [connections, setConnections]:
+        [connections: Array<Anime | Staff>, setConnections: any] = useState([]);
+
+    // list of entries pulled from api
     let [entryList, setEntryList]: 
         [entryList: Array<Anime | Staff | VoiceActor>, setEntryList: any] = useState([]);
 
     useEffect(() => { let a = async () => {
         setEntryList([]);
+        setConnections([...connections, current]);
 
         if(current.id == end.id)
             win();
@@ -17,11 +25,22 @@ export default function Game({start, end} : {start: Anime, end: Anime}){
 
     }; a();}, [current]);
 
-    return <div className="h-screen overflow-scroll px-2 pt-15">
-        <div className="grid grid-row gap-y-4 w-3xl pb-10">
-            {entryList.map((next : Anime | Staff | VoiceActor) => {
-                return <EntryListView key={next.id} entry={next} hook={setCurrent}/>
-            })}
+    return <div className="h-screen overflow-scroll max-w-3xl scrollbar-none">
+
+        <div className="text-start mx-2 mt-7 flexbox text-white sticky top-0 bg-black/75 rounded-lg p-2">
+            <p>
+                {connections.map((connection) => {
+                    return <EntryInline entry={connection}/>
+                })}
+            </p>
+        </div>
+
+        <div className="px-2 pt-5">
+            <div className="grid grid-row gap-y-4 w-full pb-10">
+                {entryList.map((next : Anime | Staff | VoiceActor) => {
+                    return <EntryListView key={next.id} entry={next} hook={setCurrent}/>
+                })}
+            </div>
         </div>
     </div>;
 }
