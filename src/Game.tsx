@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Anime, Staff, VoiceActor } from "./Types";
 import { EntryInline, EntryListView } from "./Components";
 
@@ -13,6 +13,24 @@ export default function Game({start, end} : {start: Anime, end: Anime}){
     // list of entries pulled from api
     let [entryList, setEntryList]: 
         [entryList: Array<Anime | Staff | VoiceActor>, setEntryList: any] = useState([]);
+    
+    // user search value
+    let [searchVal, setSearchVal] = useState("");
+
+    // search filter functions
+    let arrayIncludes = (element: string) => 
+        element.toLowerCase().includes(searchVal.toLowerCase());
+    let searchFilter = (entry : Anime | Staff) => {
+        if(entry.name.toLowerCase().includes(searchVal.toLowerCase()))
+            return true;
+        if(entry instanceof Anime)
+            return entry.role.some(arrayIncludes);
+        else
+            return entry.positions.some(arrayIncludes);
+    }
+
+    // final filtered list
+    let filteredEntryList = useMemo(() => entryList.filter(searchFilter), [entryList, searchVal]);
 
     useEffect(() => { let a = async () => {
         setEntryList([]);
@@ -25,19 +43,28 @@ export default function Game({start, end} : {start: Anime, end: Anime}){
 
     }; a();}, [current]);
 
-    return <div className="h-screen overflow-scroll max-w-3xl scrollbar-none">
-
+    return <div className="h-screen overflow-scroll w-3xl scrollbar-none">
         <div className="text-start mx-2 mt-7 flexbox text-white sticky top-0 bg-black/75 rounded-lg p-2">
-            <p>
+            <p className="pb-3">
                 {connections.map((connection) => {
                     return <EntryInline entry={connection}/>
                 })}
             </p>
+
+            <hr className="mx-2"/>
+
+            <div className="flex place-self-center justify-center">
+                <input 
+                    placeholder="Search:" 
+                    className="mt-4 mb-2 px-2 py-1 w-md bg-black/75 resize-none rounded-lg"
+                    onChange={e => setSearchVal(e.target.value)}
+                />
+            </div>
         </div>
 
         <div className="px-2 pt-5">
             <div className="grid grid-row gap-y-4 w-full pb-10">
-                {entryList.map((next : Anime | Staff | VoiceActor) => {
+                {filteredEntryList.map((next : Anime | Staff | VoiceActor) => {
                     return <EntryListView key={next.id} entry={next} hook={setCurrent}/>
                 })}
             </div>
