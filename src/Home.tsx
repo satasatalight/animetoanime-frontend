@@ -3,7 +3,7 @@ import { EntryCard } from "./Components";
 import Game from "./Game";
 import { Anime, DailyData, placeHolderAnime } from "./Types";
 
-export default function({setPage}: {setPage: React.Dispatch<SetStateAction<React.JSX.Element>>}){
+export default function Home({setPage}: {setPage: React.Dispatch<SetStateAction<React.JSX.Element>>}){
     // initialize and type placeholder daily data
     const [dailyData, setDailyData]: 
         [dailyData: DailyData, setDailyData: Dispatch<DailyData>] = 
