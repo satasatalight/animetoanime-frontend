@@ -1,20 +1,20 @@
-import { useEffect, useState, type Dispatch } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { EntryCard } from "./Components";
 import Game from "./Game";
 import { Anime, DailyData, placeHolderAnime } from "./Types";
 
-export default function({setPage} : {setPage : Function}){
+export default function({setPage}: {setPage: React.Dispatch<SetStateAction<React.JSX.Element>>}){
     // initialize and type placeholder daily data
-    let [dailyData, setDailyData]: 
+    const [dailyData, setDailyData]: 
         [dailyData: DailyData, setDailyData: Dispatch<DailyData>] = 
         useState(new DailyData("Loading Game...", placeHolderAnime, placeHolderAnime, []));
     
-    let [init, setInit] = useState(false);
+    const [init, setInit] = useState(false);
     
-    useEffect(() => { let a = async () => {
-        let response = await fetch("http://localhost:8080/getDailyGame?date=2026-06-15");
+    useEffect(() => { const a = async () => {
+        const response = await fetch("http://localhost:8080/getDailyGame?date=2026-06-15");
         if(response != null){
-            let json = await response.json();
+            const json = await response.json();
             setDailyData(new DailyData(
                 json.name, 
                 new Anime(json.anime1.name, json.anime1.imageUrl, json.anime1.id, json.anime1.role),

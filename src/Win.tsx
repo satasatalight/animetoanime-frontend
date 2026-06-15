@@ -4,8 +4,8 @@ import type { Anime, Entry, Staff } from "./Types";
 
 export default function Win({connections, shortestPath}: 
     {connections: Array<Anime | Staff>, shortestPath: Array<Anime | Staff>}){
-    let [shortestPathSuffix, setShortestPathSuffix] = useState("hidden");
-    let [copyIcon, setCopyIcon] = useState("clipboard");
+    const [shortestPathSuffix, setShortestPathSuffix] = useState("hidden");
+    const [copyIcon, setCopyIcon] = useState("clipboard");
     
     return <div className="text-white bg-black/75 p-5 rounded-3xl">
         <p className="py-2 max-w-lg leading-11 max-h-50 overflow-scroll">
@@ -44,7 +44,7 @@ export default function Win({connections, shortestPath}:
     </div>;
 }
 
-function copyToClipboard(connections: Array<Entry>, setIcon: Function){
+function copyToClipboard(connections: Array<Entry>, setIcon: React.Dispatch<React.SetStateAction<string>>){
     let copy = "";
 
     copy += `I completed today's Anime to Anime in ${connections.length - 1} connections!\n\n`;

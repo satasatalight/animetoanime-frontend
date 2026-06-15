@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Home from './Home.tsx';
 
 function App() {
-  let [page, setPage] = useState(<></>);
+  const [page, setPage] = useState(<></>);
 
   useEffect(() => {
     setPage(<Home setPage={setPage}/>);}, [setPage]);

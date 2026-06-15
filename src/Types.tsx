@@ -61,7 +61,7 @@ class Character {
     }
 }
 
-export let placeHolderAnime: Anime = {
+export const placeHolderAnime: Anime = {
     name: "Loading...",
     imageUrl: "https://cdn.myanimelist.net/r/42x62/images/questionmark_23.gif",
     id: -1,

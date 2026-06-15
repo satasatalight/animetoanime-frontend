@@ -5,40 +5,46 @@ import Win from "./Win";
 import confetti from "canvas-confetti";
 
 export default function Game({start, end, setPage, shortestPath}: 
-    {start: Anime, end: Anime, setPage: Function, shortestPath: Array<Anime | Staff>}){
+    {start: Anime, end: Anime, setPage: React.Dispatch<React.SetStateAction<React.JSX.Element>>, shortestPath: Array<Anime | Staff>}){
     // current entry
-    let [current, setCurrent] = useState(start);
+    const [current, setCurrent] = useState(start);
 
     // list of user-made connections to final entry
-    let [connections, setConnections]:
-        [connections: Array<Anime | Staff>, setConnections: any] = useState([]);
+    const [connections, setConnections]:
+        [connections: Array<Anime | Staff>, setConnections: React.Dispatch<React.SetStateAction<any>>]
+            = useState([]);
 
     // list of entries pulled from api
-    let [entryList, setEntryList]: 
+    const [entryList, setEntryList]: 
         [entryList: Array<Anime | Staff | VoiceActor>, setEntryList: any] = useState([]);
     
     // user search value
-    let [searchVal, setSearchVal] = useState("");
+    const [searchVal, setSearchVal] = useState("");
 
-    // search filter functions
-    let arrayIncludes = (element: string) => 
-        element.toLowerCase().includes(searchVal.toLowerCase());
-    let searchFilter = (entry : Anime | Staff) => {
-        if(entry.name.toLowerCase().includes(searchVal.toLowerCase()))
-            return true;
-        if(entry instanceof Anime)
-            return entry.role.some(arrayIncludes);
-        else
-            return entry.positions.some(arrayIncludes);
-    }
+    // create filtered list
+    const filteredEntryList = useMemo(() => {
+        // search filter functions
+        const arrayIncludes = (element: string) => 
+            element.toLowerCase().includes(searchVal.toLowerCase());
 
-    // final filtered list
-    let filteredEntryList = useMemo(() => entryList.filter(searchFilter), [entryList, searchVal]);
+        const searchFilter = (entry : Anime | Staff) => {
+            if(entry.name.toLowerCase().includes(searchVal.toLowerCase()))
+                return true;
+            if(entry instanceof Anime)
+                return entry.role.some(arrayIncludes);
+            else
+                return entry.positions.some(arrayIncludes);
+        }
+
+        // return filtered entry list
+        return entryList.filter(searchFilter);
+
+    }, [entryList, searchVal]);
 
     // call api and update connections on new entry
-    useEffect(() => { let a = async () => {
+    useEffect(() => { const a = async () => {
         setEntryList([]);
-        setConnections([...connections, current]);
+        setConnections((c: Array<Anime | Staff>) => [...c, current]);
         setEntryList(await getEntryList(current as (Anime | Staff)));
     }; a();}, [current]);
 
@@ -48,9 +54,9 @@ export default function Game({start, end, setPage, shortestPath}:
             setPage(<Win connections={connections} shortestPath={shortestPath}/>);
             confetti({particleCount: 300, spread: 200});
         }
-    }, [connections])
+    }, [connections, setPage, end.id, shortestPath])
 
-    return <div className="h-screen overflow-scroll w-3xl scrollbar-none">
+    return <div className="h-screen overflow-scroll max-w-3xl w-full scrollbar-none">
         <h2 className="pt-6 px-2 text-start">
             From <EntryInline entry={start}/> to <EntryInline entry={end}/>
         </h2>
@@ -93,28 +99,28 @@ async function getEntryList(entry: (Anime | Staff)){
     else 
         endpoint = "http://localhost:8080/getAnimeStaff?id=";
 
-    let response = await fetch(endpoint + entry.id);
-    let json = await response.json()
-    let list: Array<Anime | Staff | VoiceActor> = []
+    const response = await fetch(endpoint + entry.id);
+    const json = await response.json()
+    const list: Array<Anime | Staff | VoiceActor> = []
 
     // properly cast each list object to their respective class for correct type guarding
-    for(let [_key, v] of Object.entries(json)){
-        if('characters' in (v as Object)){
-            let value: VoiceActor = v as VoiceActor;
+    for(const [_key, v] of Object.entries(json)){
+        if('characters' in (v as object)){
+            const value: VoiceActor = v as VoiceActor;
             list.push(new VoiceActor(
                 value.name, value.imageUrl, value.id, value.positions, value.characters
             ));
         }
 
-        else if('positions' in (v as Object)){
-            let value: Staff = v as Staff;
+        else if('positions' in (v as object)){
+            const value: Staff = v as Staff;
             list.push(new Staff(
                 value.name, value.imageUrl, value.id, value.positions 
             ));
         }
         
         else {
-            let value: Anime = v as Anime;
+            const value: Anime = v as Anime;
             list.push(new Anime(
                 value.name, value.imageUrl, value.id, value.role
             ));

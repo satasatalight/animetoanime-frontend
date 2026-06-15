@@ -9,8 +9,9 @@ export function EntryCard({entry} : {entry: Entry}){
     );
 }
 
-export function EntryListView({entry, hook} : {entry: Anime | Staff, hook: Function}){
-    let subtitle: Array<string> = [];
+export function EntryListView({entry, hook}: 
+    {entry: Anime | Staff, hook: React.Dispatch<React.SetStateAction<any>>}){
+    let subtitle: Array<string>;
 
     if(entry instanceof Anime)
         subtitle = entry.role;
