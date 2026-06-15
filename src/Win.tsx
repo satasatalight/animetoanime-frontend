@@ -36,7 +36,7 @@ export default function Win({connections, shortestPath}:
                 Show Shortest Path:🔻
             </button>
             <div className={`max-w-lg leading-11 ${shortestPathSuffix}`}>
-                📏 Length: {shortestPath.length}
+                📏 Length: {shortestPath.length - 1}
                 <hr className="py-2"/>
                 <p className="max-h-50 overflow-scroll">
                     {shortestPath.map((c) => <><EntryInline key={c.id} entry={c}/>➡️</>)}

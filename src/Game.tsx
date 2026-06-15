@@ -61,7 +61,7 @@ export default function Game({start, end, setPage, shortestPath}:
             From <EntryInline entry={start}/> to <EntryInline entry={end}/>
         </h2>
 
-        <div className="text-start mx-2 mt-7 flexbox text-white sticky top-0 bg-black/75 rounded-lg p-2">
+        <div className="text-start mx-2 mt-7 flexbox text-white sticky top-0 bg-black/75 rounded-lg p-2 z-1">
             <p className="pb-3 px-2 max-h-30 overflow-scroll">
                 {connections.map((connection) => {
                     return <><EntryInline key={connection.id} entry={connection}/>➡️</>
