@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { EntryInline } from "./Components";
 import type { Anime, Entry, Staff } from "./Types";
+import ClipboardCheck from "./assets/clipboard2-check-fill.svg";
+import ClipboardEmpty from "./assets/clipboard.svg";
 
 export default function Win({connections, shortestPath}: 
     {connections: Array<Anime | Staff>, shortestPath: Array<Anime | Staff>}){
     const [shortestPathSuffix, setShortestPathSuffix] = useState("hidden");
-    const [copyIcon, setCopyIcon] = useState("clipboard");
+    const [copyIcon, setCopyIcon] = useState(ClipboardEmpty);
     
     return <div className="text-white bg-black/75 p-5 rounded-3xl">
         <p className="py-2 max-w-lg leading-11 max-h-50 overflow-scroll">
@@ -23,7 +25,7 @@ export default function Win({connections, shortestPath}:
                 className="mx-auto rounded-md bg-teal-500 px-4 py-3 text-white hover:bg-teal-400 w-3xs text-center my-3 cursor-pointer"
                 onClick={() => copyToClipboard(connections, setCopyIcon)}
             >
-                <img className="inline invert mx-2 mb-1" src={`src/assets/${copyIcon}.svg`}/>
+                <img className="inline invert mx-2 mb-1" src={copyIcon}/>
                 Share Score
                 </button>
             </div>
@@ -69,8 +71,8 @@ function copyToClipboard(connections: Array<Entry>, setIcon: React.Dispatch<Reac
 
     navigator.clipboard.writeText(copy);
 
-    setIcon("clipboard2-check-fill");
-    setTimeout(() => setIcon("clipboard"), 500);
+    setIcon(ClipboardCheck);
+    setTimeout(() => setIcon(ClipboardEmpty), 500);
 }
 
 function cutOffString(s: string){

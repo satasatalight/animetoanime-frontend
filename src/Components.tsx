@@ -1,4 +1,5 @@
 import { Anime, Entry, Staff } from "./Types";
+import LoadingIcon from "./assets/3-dots-rotate.svg";
 
 export function EntryCard({entry} : {entry: Entry}){
     return (
@@ -46,6 +47,6 @@ export function LoadingEntryList({entryList}: {entryList: Array<Entry>}){
 
     return <div className="text-white">
         Loading
-        <img className="inline invert mx-2" src="src\assets\3-dots-rotate.svg"/>
+        <img className="inline invert mx-2" src={LoadingIcon}/>
     </div>;
 }
