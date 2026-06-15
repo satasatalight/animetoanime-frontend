@@ -12,7 +12,13 @@ export default function({setPage}: {setPage: React.Dispatch<SetStateAction<React
     const [init, setInit] = useState(false);
     
     useEffect(() => { const a = async () => {
-        const response = await fetch("http://localhost:8080/getDailyGame?date=2026-06-15");
+        const today = new Date();
+        const d = String(today.getDate()).padStart(2, '0');
+        const m = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const y = today.getFullYear();
+
+        const response = await fetch(`http://localhost:8080/getDailyGame?date=${y}-${m}-${d}`);
+
         if(response != null){
             const json = await response.json();
             setDailyData(new DailyData(
