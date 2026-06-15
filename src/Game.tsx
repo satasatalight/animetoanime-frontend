@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Anime, Staff, VoiceActor } from "./Types";
 import { EntryInline, EntryListView, LoadingEntryList } from "./Components";
+import Win from "./Win";
+import confetti from "canvas-confetti";
 
-export default function Game({start, end} : {start: Anime, end: Anime}){
+export default function Game({start, end, setPage, shortestPath}: 
+    {start: Anime, end: Anime, setPage: Function, shortestPath: Array<Anime | Staff>}){
     // current entry
     let [current, setCurrent] = useState(start);
 
@@ -32,22 +35,30 @@ export default function Game({start, end} : {start: Anime, end: Anime}){
     // final filtered list
     let filteredEntryList = useMemo(() => entryList.filter(searchFilter), [entryList, searchVal]);
 
+    // call api and update connections on new entry
     useEffect(() => { let a = async () => {
         setEntryList([]);
         setConnections([...connections, current]);
-
-        if(current.id == end.id)
-            win();
-        else
-            setEntryList(await getEntryList(current as (Anime | Staff)));
-
+        setEntryList(await getEntryList(current as (Anime | Staff)));
     }; a();}, [current]);
 
+    // check for win condition
+    useEffect(() => {
+        if(connections.length > 0 && connections[connections.length - 1].id == end.id){
+            setPage(<Win connections={connections} shortestPath={shortestPath}/>);
+            confetti({particleCount: 300, spread: 200});
+        }
+    }, [connections])
+
     return <div className="h-screen overflow-scroll w-3xl scrollbar-none">
+        <h2 className="pt-6 px-2 text-start">
+            From <EntryInline entry={start}/> to <EntryInline entry={end}/>
+        </h2>
+
         <div className="text-start mx-2 mt-7 flexbox text-white sticky top-0 bg-black/75 rounded-lg p-2">
-            <p className="pb-3">
+            <p className="pb-3 px-2 max-h-30 overflow-scroll">
                 {connections.map((connection) => {
-                    return <EntryInline entry={connection}/>
+                    return <><EntryInline key={connection.id} entry={connection}/>➡️</>
                 })}
             </p>
 
@@ -111,8 +122,4 @@ async function getEntryList(entry: (Anime | Staff)){
     }
 
     return list;
-}
-
-function win(){
-    console.log("win !!!");
 }

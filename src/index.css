@@ -111,3 +111,13 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.cropIn{
+    overflow: hidden;
+    animation: 1s forwards cropIn;
+}
+
+@keyframes cropIn {
+    from {max-height: 0px;}
+    to {max-height: 1000px;}
+}
