@@ -16,7 +16,8 @@ export default function Game({start, end, setPage, shortestPath}:
 
     // list of entries pulled from api
     const [entryList, setEntryList]: 
-        [entryList: Array<Anime | Staff | VoiceActor>, setEntryList: any] = useState([]);
+        [entryList: Array<Anime | Staff | VoiceActor>, setEntryList: React.Dispatch<React.SetStateAction<any>>] 
+            = useState([]);
     
     // user search value
     const [searchVal, setSearchVal] = useState("");
@@ -83,7 +84,7 @@ export default function Game({start, end, setPage, shortestPath}:
             <LoadingEntryList entryList={entryList}/>
             <div className="grid grid-row gap-y-4 w-full pb-10">
                 {filteredEntryList.map((next : Anime | Staff | VoiceActor) => {
-                    return <EntryListView key={next.id} entry={next} hook={setCurrent}/>
+                    return <EntryListView key={next.id} entry={next} hook={setCurrent as React.Dispatch<React.SetStateAction<Anime | Staff>>}/>
                 })}
             </div>
         </div>
@@ -95,9 +96,11 @@ async function getEntryList(entry: (Anime | Staff)){
 
     // get correct endpoint for entry type
     if(entry instanceof Staff)
-        endpoint = "http://localhost:8080/getStaffAnime?id=";
+        //endpoint = "http://localhost:8080/getStaffAnime?id=";
+        endpoint = "https://anime-to-anime-backend-60b3af0c7546.herokuapp.com/getStaffAnime?id=";
     else 
-        endpoint = "http://localhost:8080/getAnimeStaff?id=";
+        //endpoint = "http://localhost:8080/getAnimeStaff?id=";
+        endpoint = "https://anime-to-anime-backend-60b3af0c7546.herokuapp.com/getAnimeStaff?id=";
 
     const response = await fetch(endpoint + entry.id);
     const json = await response.json()

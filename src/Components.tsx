@@ -11,7 +11,7 @@ export function EntryCard({entry} : {entry: Entry}){
 }
 
 export function EntryListView({entry, hook}: 
-    {entry: Anime | Staff, hook: React.Dispatch<React.SetStateAction<any>>}){
+    {entry: Anime | Staff, hook: React.Dispatch<React.SetStateAction<Anime | Staff>>}){
     let subtitle: Array<string>;
 
     if(entry instanceof Anime)

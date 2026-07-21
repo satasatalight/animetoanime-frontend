@@ -27,8 +27,8 @@ export default function Win({connections, shortestPath}:
             >
                 <img className="inline invert mx-2 mb-1" src={copyIcon}/>
                 Share Score
-                </button>
-            </div>
+            </button>
+        </div>
 
         <div className="py-2 text-start">
             <button className="cursor-pointer" onClick={() => 
