@@ -2,6 +2,7 @@ name: update-satasite
 env:
   EVENT: build-animetoanime
 on: 
+  workflow_dispatch:
   push:
     branches:
       - master
