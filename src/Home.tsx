@@ -17,7 +17,9 @@ export default function Home({setPage}: {setPage: React.Dispatch<SetStateAction<
         const m = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         const y = today.getFullYear();
 
-        const response = await fetch(`http://localhost:8080/getDailyGame?date=${y}-${m}-${d}`);
+        //const response = await fetch(`http://localhost:8080/getDailyGame?date=${y}-${m}-${d}`);
+        const response = await fetch(`https://anime-to-anime-backend-60b3af0c7546.herokuapp.com/getDailyGame?date=${y}-${m}-${d}`);
+        //const response = await fetch(`https://anime-to-anime-backend-60b3af0c7546.herokuapp.com/getDailyGame?date=2026-07-16`);
 
         if(response != null){
             const json = await response.json();
